@@ -8,8 +8,9 @@ namespace ED_Trabajo_Practico
 {
     internal class Lista
     {
-        public Nodo? primero {  get; set; }
+        public Nodo? primero { get; set; }
         public Nodo? ultimo { get; set; }
+        int contador = 0;
         public Lista()
         {
             primero = null;
@@ -18,35 +19,42 @@ namespace ED_Trabajo_Practico
 
         public void crear(Nodo nodo)
         {
-            if(primero == null && ultimo == null)
+            if (nodo != null)
             {
-                primero = nodo;
-                ultimo = nodo;
+                if (primero == null && ultimo == null)
+                {
+                    primero = nodo;
+                    ultimo = nodo;
+                }
+                else
+                {
+                    insertar(nodo);
+                }
             }
             else
             {
-                insertar(nodo);
+                MessageBox.Show("Error en la carga del cliente.\nRevise la información por favor.", "Error", MessageBoxButtons.OK);
             }
         }
         public void insertar(Nodo nodo)
         {
-            if(primero != null && ultimo != null)
+            if (primero != null && ultimo != null)
             {
-                if(nodo.turno <  primero.turno)
+                if (nodo.turno < primero.turno)
                 {
                     nodo.siguiente = primero;
                     primero = nodo;
                 }
-                if(nodo.turno > ultimo.turno)
+                if (nodo.turno > ultimo.turno)
                 {
                     ultimo.siguiente = nodo;
                     ultimo = nodo;
                 }
-                if(nodo.turno > primero.turno && nodo.turno < primero.turno)
+                if (nodo.turno > primero.turno && nodo.turno < primero.turno)
                 {
                     Nodo? anterior = null;
                     Nodo? auxiliar = primero;
-                    while(nodo.turno > auxiliar.turno)
+                    while (nodo.turno > auxiliar.turno)
                     {
                         anterior = auxiliar;
                         auxiliar = auxiliar.siguiente;
@@ -73,35 +81,127 @@ namespace ED_Trabajo_Practico
 
             return nodos;
         }
-        public Nodo buscar()
-        {
+        public bool ExisteNodo(int dni)
+        {            
             Nodo aux = primero;
             while (aux != null)
             {
-                if (aux.esCliente)
+                if (aux.dni == dni)
                 {
-                    break;
+                    return true;
                 }
                 aux = aux.siguiente;
             }
-            return aux;
+            return false;
         }
-        public Nodo eliminar(Nodo nodo)
+        public Nodo EliminarDeCaja()
         {
+            Nodo nodoQueSeDevuelve = null;
             Nodo aux = primero;
             Nodo anterior = null;
+            if (aux != null)
+            {
+                
+                if(contador == 0)
+                {
+                    nodoQueSeDevuelve = primero;
+                    primero = primero.siguiente;
+                    contador++;
+                    return nodoQueSeDevuelve;
+                }
+                else
+                {
+                    while(contador > 0 && contador < 4 && aux != null)
+                    {
+                        if(aux.esCliente == true && contador > 0 && contador < 4)
+                        {
+                            nodoQueSeDevuelve = aux;
+                            contador = 0;
+                            if (aux.siguiente != null)
+                            {
+                                anterior.siguiente = aux.siguiente;
+                            }
+                            else
+                            {
+                                anterior.siguiente = null;
+                            }
+                            return nodoQueSeDevuelve;
+                        }
+                        else
+                        {
+                            anterior = aux;
+                            aux = aux.siguiente;
+                            contador++;
+                        }
+                    }
+                    contador = 0;
+                    nodoQueSeDevuelve = primero;
+                    primero = primero.siguiente;
+
+                }
+            }
+            return nodoQueSeDevuelve;
+        }
+        public Nodo EliminarDeAtencionPersonal()
+        {
+            Nodo nodoQueSeDevuelve = null;
+            Nodo aux = primero;
+            Nodo anterior = null;
+            if (aux != null)
+            {
+
+                if (contador == 0)
+                {
+                    nodoQueSeDevuelve = primero;
+                    primero = primero.siguiente;
+                    contador++;
+                    return nodoQueSeDevuelve;
+                }
+                else
+                {
+                    int maxLista = this.ContarMaxLista();
+                    while (contador > 0 && contador <= maxLista && aux != null)
+                    {
+                        if (aux.esCliente == true && contador > 0 && contador <= maxLista)
+                        {
+                            nodoQueSeDevuelve = aux;
+                            contador = 0;
+                            if (aux.siguiente != null)
+                            {
+                                anterior.siguiente = aux.siguiente;
+                            }
+                            else
+                            {
+                                anterior.siguiente = null;
+                            }
+                            return nodoQueSeDevuelve;
+                        }
+                        else
+                        {
+                            anterior = aux;
+                            aux = aux.siguiente;
+                            contador++;
+                        }
+                    }
+                    contador = 0;
+                    nodoQueSeDevuelve = primero;
+                    primero = primero.siguiente;
+
+                }
+            }
+            return nodoQueSeDevuelve;
+        }
+        private int ContarMaxLista()
+        {
+            int max = 0;
+            Nodo aux = primero;
             while (aux != null)
             {
-                if(nodo == aux)
-                {
-                    //fixme
-                    anterior.siguiente = aux.siguiente;
-                    break;
-                }
-                anterior = aux;
+                max++;
                 aux = aux.siguiente;
             }
-            return aux;
+            
+            return max;
         }
     }
 }

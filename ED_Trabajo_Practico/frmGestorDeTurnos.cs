@@ -24,7 +24,7 @@ namespace ED_Trabajo_Practico
             if (!string.IsNullOrEmpty(txtDniIngreso.Text))
             {
                 int dni = Convert.ToInt32(txtDniIngreso.Text);
-                if (!cola.existeNodo(dni))
+                if (!cola.existeNodo(dni) && !listaAtencionPersonal.ExisteNodo(dni) && !listacaja.ExisteNodo(dni))
                 {
                     Nodo nuevo = new Nodo();
                     nuevo.dni = dni;
@@ -37,6 +37,7 @@ namespace ED_Trabajo_Practico
                 {
                     MessageBox.Show("El DNI ingresado ya posee un turno registrado", "Aviso",
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    txtDniIngreso.Text = string.Empty;
                 }
             }
         }
@@ -62,8 +63,7 @@ namespace ED_Trabajo_Practico
             {
                 if (nodoAuxiliar != null)
                 {
-                    if (chkEsCliente.Checked) nodoAuxiliar.esCliente = true;
-
+                    nodoAuxiliar.esCliente = chkEsCliente.Checked ? true : false;
                     if (radAtencionPersonal.Checked)
                     {
                         listaAtencionPersonal.crear(nodoAuxiliar);
@@ -89,61 +89,25 @@ namespace ED_Trabajo_Practico
         private void btnIniciarCaja_Click(object sender, EventArgs e)
         {
             Nodo aux = new Nodo();
-            int contador = 0;
-            if(contador == 0)
+            aux = listacaja.EliminarDeCaja();
+            if (aux != null)
             {
-                aux = listacaja.primero;
-                listacaja.eliminar(listacaja.primero);
+                txtAtendiendoCaja.Text = aux.dni.ToString();
+                List<Nodo> lista = listacaja.listar();
+                mostrarDGVListaEnlazada(lista,dgvCaja);
             }
-            if(contador == 1 && contador == 2)
-            {
-                int contadorAux = 0;
-                List<Nodo> listaAux = listacaja.listar();
-                while(contadorAux < 3)
-                {
-                    if (listaAux[contadorAux].esCliente == true)
-                    {
-                        aux = listaAux[contadorAux];
-                        listacaja.eliminar(aux);
-                    }
-                    contadorAux++;
-                }
-            }
-            if(aux.esCliente == true)
-            {
-                contador = 0;
-            }
-            txtAtendiendoCaja.Text = aux.dni.ToString();
         }
 
         private void btnIniciarAP_Click(object sender, EventArgs e)
         {
             Nodo aux = new Nodo();
-            int contador = 0;
-            if (contador == 0)
+            aux = listaAtencionPersonal.EliminarDeAtencionPersonal();
+            if (aux != null)
             {
-                aux = listaAtencionPersonal.primero;
-                listacaja.eliminar(listaAtencionPersonal.primero);
+                txtAtendiendoAP.Text = aux.dni.ToString();
+                List<Nodo> lista = listaAtencionPersonal.listar();
+                mostrarDGVListaEnlazada(lista, dgvAP);
             }
-            if (contador == 1 && contador == 2)
-            {
-                int contadorAux = 0;
-                List<Nodo> listaAux = listacaja.listar();
-                while (contadorAux < 3)
-                {
-                    if (listaAux[contadorAux].esCliente == true)
-                    {
-                        aux = listaAux[contadorAux];
-                        listacaja.eliminar(aux);
-                    }
-                    contadorAux++;
-                }
-            }
-            if (aux.esCliente == true)
-            {
-                contador = 0;
-            }
-            txtAtendiendoCaja.Text = aux.dni.ToString();
         }
         //funcion estandar para cargar dgv con la cola 
         public void cargarListaDGV(List<Nodo> lista, DataGridView dgv)
