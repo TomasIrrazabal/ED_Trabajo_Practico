@@ -64,6 +64,7 @@ namespace ED_Trabajo_Practico
                 if (nodoAuxiliar != null)
                 {
                     nodoAuxiliar.esCliente = chkEsCliente.Checked ? true : false;
+                    
                     if (radAtencionPersonal.Checked)
                     {
                         listaAtencionPersonal.crear(nodoAuxiliar);
@@ -185,19 +186,21 @@ namespace ED_Trabajo_Practico
         //Controla que el txt acepte unicamente digitos y controles
         private void txtDniIngreso_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (char.IsControl(e.KeyChar) && char.IsDigit(e.KeyChar))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
-                e.Handled = false;
+                e.Handled = true;
             }
         }
         //Controla el maximo de caracteres en el txt
         private void txtDniIngreso_TextChanged(object sender, EventArgs e)
         {
+            
             if (txtDniIngreso.Text.Length > 8)
             {
                 txtDniIngreso.Text = txtDniIngreso.Text.Substring(0, 8);
                 txtDniIngreso.SelectionStart = txtDniIngreso.Text.Length;
             }
+
 
         }
         //controla si el txt recibio la informacion y habilita para ingresarla al siguiente sector
