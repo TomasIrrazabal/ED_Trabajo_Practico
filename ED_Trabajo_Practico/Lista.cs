@@ -96,9 +96,11 @@ namespace ED_Trabajo_Practico
         }
         public Nodo EliminarDeCaja()
         {
-            Nodo nodoQueSeDevuelve = null;
             Nodo aux = primero;
             Nodo anterior = null;
+
+            Nodo nodoQueSeDevuelve = null;
+
             if (aux != null)
             {
                 
@@ -111,21 +113,26 @@ namespace ED_Trabajo_Practico
                 }
                 else
                 {
-                    while(contador > 0 && contador < 4 && aux != null)
+                    while (contador < 4 && aux != null)
                     {
-                        if(aux.esCliente == true && contador > 0 && contador < 4)
+                        if(aux.esCliente)
                         {
                             nodoQueSeDevuelve = aux;
                             contador = 0;
-                            if (aux.siguiente != null)
+
+                            if(aux == primero)
+                            {
+                                aux = aux.siguiente;
+                            }
+                            else if (aux != null && anterior != null)
                             {
                                 anterior.siguiente = aux.siguiente;
+
+                                if (aux.siguiente == null) ultimo = anterior;
                             }
-                            else
-                            {
-                                anterior.siguiente = null;
-                            }
+
                             return nodoQueSeDevuelve;
+
                         }
                         else
                         {
@@ -135,9 +142,7 @@ namespace ED_Trabajo_Practico
                         }
                     }
                     contador = 0;
-                    nodoQueSeDevuelve = primero;
-                    primero = primero.siguiente;
-
+                    return nodoQueSeDevuelve = primero;
                 }
             }
             return nodoQueSeDevuelve;
@@ -145,11 +150,11 @@ namespace ED_Trabajo_Practico
         public Nodo EliminarDeAtencionPersonal()
         {
             Nodo nodoQueSeDevuelve = null;
+
             Nodo aux = primero;
             Nodo anterior = null;
             if (aux != null)
             {
-
                 if (contador == 0)
                 {
                     nodoQueSeDevuelve = primero;
@@ -158,35 +163,49 @@ namespace ED_Trabajo_Practico
                     return nodoQueSeDevuelve;
                 }
                 else
-                {
-                    int maxLista = this.ContarMaxLista();
-                    while (contador > 0 && contador <= maxLista && aux != null)
+                {                    
+                    while ((contador == 1) && (aux != null))
                     {
-                        if (aux.esCliente == true && contador > 0 && contador <= maxLista)
+                        if (aux.esCliente)
+                        {
+                            break;
+                        }
+
+                        anterior = aux;
+                        aux = aux.siguiente;
+                    }
+
+                    if((aux != null) && (aux.esCliente))
+                    {
+                        if(aux == primero)
+                        {
+                            nodoQueSeDevuelve = primero;
+                            primero = primero.siguiente;
+                        }
+                        else if((aux.siguiente == null) && (anterior != null))
                         {
                             nodoQueSeDevuelve = aux;
-                            contador = 0;
-                            if (aux.siguiente != null)
-                            {
-                                anterior.siguiente = aux.siguiente;
-                            }
-                            else
-                            {
-                                anterior.siguiente = null;
-                            }
-                            return nodoQueSeDevuelve;
+                            ultimo = anterior;
+                            anterior.siguiente = null;
                         }
                         else
                         {
-                            anterior = aux;
-                            aux = aux.siguiente;
-                            contador++;
+                            nodoQueSeDevuelve = aux;
+                            anterior.siguiente = aux.siguiente;
                         }
+                        contador = 0;
+                        return nodoQueSeDevuelve;
                     }
-                    contador = 0;
-                    nodoQueSeDevuelve = primero;
-                    primero = primero.siguiente;
 
+                    nodoQueSeDevuelve = primero;
+
+                    if (primero == ultimo)
+                    {
+                        ultimo = null;    
+                    }
+                    primero = primero.siguiente;
+                    
+                    return nodoQueSeDevuelve;
                 }
             }
             return nodoQueSeDevuelve;
