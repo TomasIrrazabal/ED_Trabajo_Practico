@@ -128,7 +128,11 @@ namespace ED_Trabajo_Practico
                             {
                                 anterior.siguiente = aux.siguiente;
 
-                                if (aux.siguiente == null) ultimo = anterior;
+                                if (aux.siguiente == null) 
+                                {
+                                    ultimo = anterior;
+                                    ultimo.siguiente = null;
+                                }
                             }
 
                             return nodoQueSeDevuelve;
